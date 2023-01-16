@@ -28,7 +28,7 @@ Route::get('/airports', Airport\IndexController::class);
 Route::group([
     'prefix' => 'flight',
 ], function() {
-    Route::post('/search', Flight\SearchController::class);
+    Route::get('/search', Flight\SearchController::class);
     Route::post('/prebook', Flight\PrebookController::class);
     Route::post('/book', Flight\BookController::class);
 });
