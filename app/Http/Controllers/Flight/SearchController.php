@@ -37,15 +37,25 @@ class SearchController extends Controller
             ], 422);
         }
 
-        $query = $validator->validated();
+        try {
+            $query = $validator->validated();
+    
+            $btw = new BTW();
+            $flights = $this->_processFlights($btw->searchFlights($query), $request->Class);
+            
+            return response()->json([
+                'success' => true,
+                'flights' => $flights
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => "Failed to search flights. Please try again later.",
+                'error' => $th->getMessage()
+            ], 500);
+        }
 
-        $btw = new BTW();
-        $flights = $this->_processFlights($btw->searchFlights($query), $request->Class);
 
-        return response()->json([
-            'success' => true,
-            'flights' => $flights
-        ], 200);
     }
 
     /**
