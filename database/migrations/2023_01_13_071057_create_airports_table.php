@@ -19,15 +19,9 @@ return new class extends Migration
             $table->string('city');
             $table->string('country');
             $table->string('iata');
-            $table->string('icao');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->string('altitude');
-            $table->string('timezone');
-            $table->string('dst');
-            $table->string('tz_database_timezone');
+            $table->string('location');
             $table->string('type');
-            $table->string('source');
+            $table->text('alias');
             $table->timestamps();
         });
     }

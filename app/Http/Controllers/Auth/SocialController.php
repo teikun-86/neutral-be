@@ -11,21 +11,29 @@ use Laravel\Socialite\Facades\Socialite;
 class SocialController extends Controller
 {
     /**
-     * Redirect the user to the GitHub authentication page.
+     * Redirect the user to the Third Party authentication page.
      */
     public function redirectToProvider(string $provider): \Illuminate\Http\RedirectResponse
     {
         if (! $this->_validateProvider($provider)) abort(404);
+
+        config([
+            "services.{$provider}.redirect" => config("services.{$provider}.redirect") . "?lang=" . app()->getLocale(),
+        ]);
         
         return Socialite::driver($provider)->redirect();
     }
 
     /**
-     * Obtain the user information from GitHub.
+     * Obtain the user information from Third Party.
      */
     public function handleProviderCallback($provider): \Illuminate\Http\RedirectResponse
     {
         if (! $this->_validateProvider($provider)) abort(404);
+
+        config([
+            "services.{$provider}.redirect" => config("services.{$provider}.redirect") . "?lang=" . app()->getLocale(),
+        ]);
 
         $socialUser = Socialite::driver($provider)->stateless()->user();
 
@@ -99,6 +107,8 @@ class SocialController extends Controller
     private function _buildRedirect(string $provider, string $provider_id): string
     {
         $fe = config('app.frontend_url');
-        return "{$fe}?social={$provider}&user_id={$provider_id}";
+        $locale = app()->getLocale();
+        
+        return "{$fe}/$locale?social={$provider}&user_id={$provider_id}";
     }
 }

@@ -34,6 +34,14 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function attributes()
+    {
+        return [
+            'login' => 'Email atau Telepon',
+            'password' => 'Password',
+        ];
+    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *

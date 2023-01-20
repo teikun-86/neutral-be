@@ -21,18 +21,27 @@ class RegisteredUserController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'min:3', 'max:255'],
+            'call_code' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255', 'unique:' . User::class],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [], [
+            'name' => 'Nama',
+            'call_code' => 'Kode Negara',
+            'phone' => 'Telepon',
+            'email' => 'Email',
+            'password' => 'Password',
         ]);
+
+        $md5 = md5(strtolower(trim($request->email)));
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
+            'phone' => "{$request->call_code}{$request->phone}",
             'password' => Hash::make($request->password),
-            'avatar' => 'https://avatars.githubusercontent.com/u/60819208?v=4'
+            'avatar' => "https://secure.gravatar.com/avatar/$md5?s=200"
         ]);
 
         event(new Registered($user));

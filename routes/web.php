@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Airport;
 use App\Http\Controllers\Flight;
 use App\Http\Controllers\Profile;
+use App\Http\Controllers\Destination;
 
 Route::get('/', function () {
     return [
@@ -24,6 +25,13 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::get('/airports', Airport\IndexController::class);
+
+Route::group([
+    'prefix' => 'destinations',
+], function() {
+    Route::get('/', Destination\ShowController::class);
+    Route::get('/tour', Destination\TourController::class);
+});
 
 Route::group([
     'prefix' => 'flight',

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('flag');
-            $table->string('phonecode');
+            $table->string('dial_code');
             $table->timestamps();
         });
     }

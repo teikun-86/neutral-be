@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('name');
             $table->string('slug');
-            $table->string('description');
+            $table->text('description')->nullable();
             $table->string('address');
             $table->string('image');
             $table->string('price')->nullable();

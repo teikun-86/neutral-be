@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Destination;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
+Route::group([
+    'prefix' => 'destinations',
+], function () {
+    Route::post('/store', Destination\StoreController::class)->middleware('auth:sanctum');
+});

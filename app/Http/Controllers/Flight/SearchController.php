@@ -39,10 +39,10 @@ class SearchController extends Controller
 
         try {
             $query = $validator->validated();
-    
+
             $btw = new BTW();
             $flights = $this->_processFlights($btw->searchFlights($query), $request->Class);
-            
+
             return response()->json([
                 'success' => true,
                 'flights' => $flights
@@ -54,8 +54,6 @@ class SearchController extends Controller
                 'error' => $th->getMessage()
             ], 500);
         }
-
-
     }
 
     /**
@@ -95,7 +93,6 @@ class SearchController extends Controller
             'Return' => $returns
         ];
     }
-
 
     private function __applyFilter($flights, $airports, $flightClass)
     {
