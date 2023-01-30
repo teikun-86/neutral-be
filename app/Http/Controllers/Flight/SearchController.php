@@ -96,7 +96,9 @@ class SearchController extends Controller
 
     private function __applyFilter($flights, $airports, $flightClass)
     {
-        return $flights->filter(fn($flightGroup) => count($flightGroup) === 1)->map(function ($flightGroup) use ($airports, $flightClass) {
+        return $flights
+            // ->filter(fn($flightGroup) => count($flightGroup) === 1)
+            ->map(function ($flightGroup) use ($airports, $flightClass) {
             return collect($flightGroup)->map(function ($flight) use ($airports, $flightClass) {
                 $flight['DepartureAirport'] = $airports[$flight['DepartureAirport']];
                 $flight['ArrivalAirport'] = $airports[$flight['ArrivalAirport']];
@@ -118,7 +120,8 @@ class SearchController extends Controller
             })->filter(function ($flight) {
                 return $flight['available'] !== null;
             })->map(fn($flight) => $this->__transform($flight, count($flightGroup) - 1))->values()->flatten(1);
-        })->flatten(1);
+        })
+        ->flatten(1);
     }
 
     private function __transform($flight, $transit = 0) {
