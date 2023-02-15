@@ -24,10 +24,10 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->integer('seats')->default(0);
             $table->string('flight_number')->nullable();
-            $table->timestamp('depart_at');
-            $table->timestamp('arrive_at');
-            $table->timestamp('return_depart_at');
-            $table->timestamp('return_arrive_at');
+            $table->timestamp('depart_at')->nullable();
+            $table->timestamp('arrive_at')->nullable();
+            $table->timestamp('return_depart_at')->nullable();
+            $table->timestamp('return_arrive_at')->nullable();
             $table->timestamps();
         });
     }
