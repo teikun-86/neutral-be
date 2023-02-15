@@ -29,10 +29,10 @@ class UpdateController extends Controller
             'program_type' => 'required|in:9,12',
             'price' => 'required|numeric',
             'seats' => 'required|numeric',
-            'depart_at' => 'required|datetime',
-            'arrive_at' => 'required|datetime',
-            'return_depart_at' => 'required|datetime',
-            'return_arrive_at' => 'required|datetime',
+            'depart_at' => 'required|date_format:Y-m-d H:i:s',
+            'arrive_at' => 'required|date_format:Y-m-d H:i:s',
+            'return_depart_at' => 'required|date_format:Y-m-d H:i:s',
+            'return_arrive_at' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
         if ($validator->fails()) {
