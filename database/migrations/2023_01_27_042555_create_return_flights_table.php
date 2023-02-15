@@ -25,8 +25,8 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->string('currency_code');
             $table->string('res_book_desig_code');
-            $table->timestamp('departure_at');
-            $table->timestamp('arrival_at');
+            $table->timestamp('departure_at')->nullable()->default(null);
+            $table->timestamp('arrival_at')->nullable()->default(null);
             $table->timestamps();
         });
     }
