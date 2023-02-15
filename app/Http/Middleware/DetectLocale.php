@@ -17,7 +17,7 @@ class DetectLocale
     public function handle(Request $request, Closure $next)
     {
         if ($request->has('lang')) {
-            app()->setLocale($request->input('lang'));
+            app()->setLocale(explode("-", $request->input('lang'))[0]);
         }
         
         return $next($request);

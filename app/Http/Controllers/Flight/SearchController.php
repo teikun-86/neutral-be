@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Flight;
 
-use App\BTW\BTW;
+use App\Services\BTW;
 use App\Http\Controllers\Controller;
 use App\Models\Airport;
 use Illuminate\Http\Request;

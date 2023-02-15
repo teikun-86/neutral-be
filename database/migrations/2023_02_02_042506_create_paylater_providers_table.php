@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('carts', function (Blueprint $table) {
-            $table->uuid("id")->primary();
-            $table->string("type");
-            $table->string("step");
-            $table->foreignId("user_id")->nullable();
-            $table->json("items");
-            $table->json("contact")->nullable();
-            $table->json("passengers")->nullable();
+        Schema::create('paylater_providers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('code')->unique();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('paylater_providers');
     }
 };

@@ -19,7 +19,7 @@ class IndexController extends Controller
     {
         Log::debug("Request to: " . $request->fullUrl());
         
-        $airports = Airport::query();
+        $airports = Airport::query()->with(['city', 'country']);
 
         if ($request->has('iata')) {
             if (is_array($request->iata)) {

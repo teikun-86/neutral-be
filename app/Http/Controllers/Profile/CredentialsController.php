@@ -21,12 +21,15 @@ class CredentialsController extends Controller
         $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'phone' => ['required', 'string', 'max:255', 'unique:users,phone,' . $user->id],
+            'country_id' => ['required', 'exists:countries,id']
         ]);
 
         try {
             DB::beginTransaction();
             
-            $toUpdate = [];
+            $toUpdate = [
+                'country_id' => $request->country_id
+            ];
             if ($request->email !== $user->email) {
                 $toUpdate['email'] = $request->email;
             }

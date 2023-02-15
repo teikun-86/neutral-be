@@ -2,42 +2,29 @@
 
 namespace App\Models;
 
+use App\Traits\Viewable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Destination extends Model
 {
-    use HasFactory;
+    use HasFactory, Viewable;
 
     /**
-     * The attributes that are mass assignable.
-     * 
-     * @var string[]
+     * The attributes that can be mass assigned.
      */
     protected $fillable = [
         'country_id',
+        'province_id',
         'city_id',
-        'district_id',
-        'type',
         'name',
         'slug',
-        'description',
-        'address',
-        'image',
-        'price',
+        'location',
+        'type',
     ];
 
     /**
-     * The attributes that should be casted to native types.
-     * 
-     * @var array
-     */
-    protected $casts = [
-        'image' => 'array',
-    ];
-
-    /**
-     * Get the country that owns the Destination
+     * Get the country that owns the destination.
      */
     public function country()
     {
@@ -45,18 +32,18 @@ class Destination extends Model
     }
 
     /**
-     * Get the city that owns the Destination
+     * Get the province that owns the destination.
+     */
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    /**
+     * Get the city that owns the destination.
      */
     public function city()
     {
         return $this->belongsTo(City::class);
-    }
-
-    /**
-     * Get the district that owns the Destination
-     */
-    public function district()
-    {
-        return $this->belongsTo(District::class);
     }
 }

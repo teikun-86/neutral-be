@@ -25,7 +25,7 @@
         "code": "DZ"
     },
     {
-        "name": "AmericanSamoa",
+        "name": "American Samoa",
         "dial_code": "+1684",
         "code": "AS"
     },
@@ -135,7 +135,12 @@
         "code": "BT"
     },
     {
-        "name": "Bolivia, Plurinational State of",
+        "name": "Bonaire",
+        "dial_code": "+599",
+        "code": "BQ"
+    },
+    {
+        "name": "Bolivia",
         "dial_code": "+591",
         "code": "BO"
     },
@@ -280,6 +285,11 @@
         "code": "CU"
     },
     {
+        "name": "Curacao",
+        "dial_code": "+599",
+        "code": "CW"
+    },
+    {
         "name": "Cyprus",
         "dial_code": "+357",
         "code": "CY"
@@ -345,7 +355,7 @@
         "code": "ET"
     },
     {
-        "name": "Falkland Islands (Malvinas)",
+        "name": "Falkland Islands",
         "dial_code": "+500",
         "code": "FK"
     },
@@ -475,7 +485,7 @@
         "code": "HN"
     },
     {
-        "name": "Hong Kong",
+        "name": "Hong Kong (SAR) China",
         "dial_code": "+852",
         "code": "HK"
     },
@@ -505,7 +515,7 @@
         "code": "IQ"
     },
     {
-        "name": "Ireland",
+        "name": "Republic of Ireland",
         "dial_code": "+353",
         "code": "IE"
     },
@@ -605,7 +615,7 @@
         "code": "LR"
     },
     {
-        "name": "Libyan Arab Jamahiriya",
+        "name": "Libya",
         "dial_code": "+218",
         "code": "LY"
     },
@@ -625,7 +635,7 @@
         "code": "LU"
     },
     {
-        "name": "Macao",
+        "name": "Macao (SAR) China",
         "dial_code": "+853",
         "code": "MO"
     },
@@ -905,7 +915,7 @@
         "code": "BL"
     },
     {
-        "name": "Saint Helena, Ascension and Tristan Da Cunha",
+        "name": "Saint Helena",
         "dial_code": "+290",
         "code": "SH"
     },
@@ -930,7 +940,7 @@
         "code": "PM"
     },
     {
-        "name": "Saint Vincent and the Grenadines",
+        "name": "St Vincent and the Grenadines",
         "dial_code": "+1784",
         "code": "VC"
     },
@@ -1025,6 +1035,11 @@
         "code": "LK"
     },
     {
+        "name": "St Maarten (Dutch Part)",
+        "dial_code": "+721",
+        "code": "SX"
+    },
+    {
         "name": "Sudan",
         "dial_code": "+249",
         "code": "SD"
@@ -1060,7 +1075,7 @@
         "code": "SY"
     },
     {
-        "name": "Taiwan",
+        "name": "Chinese Taipei",
         "dial_code": "+886",
         "code": "TW"
     },
@@ -1170,7 +1185,7 @@
         "code": "VU"
     },
     {
-        "name": "Venezuela, Bolivarian Republic of Venezuela",
+        "name": "Venezuela",
         "dial_code": "+58",
         "code": "VE"
     },
@@ -1190,7 +1205,7 @@
         "code": "VI"
     },
     {
-        "name": "Wallis and Futuna",
+        "name": "Wallis and Futuna Islands",
         "dial_code": "+681",
         "code": "WF"
     },

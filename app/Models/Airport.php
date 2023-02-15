@@ -31,11 +31,27 @@ class Airport extends Model
      */
     protected $fillable = [
         'name',
-        'city',
-        'country',
+        'city_id',
+        'country_id',
         'iata',
         'location',
         'type',
         'alias'
     ];
+
+    /**
+     * Get the country that owns the airport.
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    /**
+     * Get the city that owns the airport.
+     */
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

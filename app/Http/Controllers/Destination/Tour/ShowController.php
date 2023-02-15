@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Destination;
+namespace App\Http\Controllers\Destination\Tour;
 
 use App\Http\Controllers\Controller;
 use App\Models\Destination;
 use Illuminate\Http\Request;
 
-class TourController extends Controller
+class ShowController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -16,10 +16,10 @@ class TourController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $domestic = Destination::with('country', 'city', 'district')
+        $domestic = Destination::with('country', 'city', 'province')
                 ->whereRelation('country', 'name', 'Indonesia')
                 ->inRandomOrder()->limit(10)->get();
-        $international = Destination::with('country', 'city', 'district')
+        $international = Destination::with('country', 'city', 'province')
                 ->whereRelation('country', 'name', '!=', 'Indonesia')
                 ->inRandomOrder()->limit(10)->get();
 

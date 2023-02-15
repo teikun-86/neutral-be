@@ -47,6 +47,9 @@ class SocialController extends Controller
             if ($provider === 'facebook') {
                 // replace the size of the avatar to large
                 $avatar = str_replace('type=normal', 'type=large', $avatar);
+            } else {
+                // replace the size of the avatar to 500x500
+                $avatar = str_replace('s96-c', 's500-c', $avatar);
             }
             
             $user = User::create([
@@ -108,6 +111,8 @@ class SocialController extends Controller
     {
         $fe = config('app.frontend_url');
         $locale = app()->getLocale();
+
+        $locale = $locale === 'en' ? 'en-US' : 'id-ID';
         
         return "{$fe}/$locale?social={$provider}&user_id={$provider_id}";
     }

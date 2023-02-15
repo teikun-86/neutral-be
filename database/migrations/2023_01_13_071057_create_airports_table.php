@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('airports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('country_id');
+            $table->foreignId('city_id');
             $table->string('name');
-            $table->string('city');
-            $table->string('country');
             $table->string('iata');
             $table->string('location');
             $table->string('type');

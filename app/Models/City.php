@@ -26,4 +26,20 @@ class City extends Model
     {
         return $this->belongsTo(Country::class);
     }
+
+    /**
+     * Get the tours for the city.
+     */
+    public function tours()
+    {
+        return $this->hasMany(Tour::class);
+    }
+
+    /**
+     * Get the districts for the city.
+     */
+    public function districts()
+    {
+        return $this->hasMany(District::class);
+    }
 }

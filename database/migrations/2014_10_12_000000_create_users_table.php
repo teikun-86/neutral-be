@@ -17,12 +17,15 @@ return new class extends Migration
             $table->id();
             $table->string('google_id')->nullable();
             $table->string('facebook_id')->nullable();
+            $table->foreignId('company_id')->nullable();
+            $table->foreignId('country_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar')->nullable();
+            $table->string('user_type')->default('personal');
             $table->date('birth_date')->nullable();
             $table->rememberToken();
             $table->timestamps();
