@@ -22,10 +22,10 @@ return new class extends Migration
             $table->json('room_detail');
             $table->bigInteger('packages_available');
             $table->bigInteger('price_per_package');
-            $table->timestamp('first_check_in_at');
-            $table->timestamp('first_check_out_at');
-            $table->timestamp('last_check_in_at');
-            $table->timestamp('last_check_out_at');
+            $table->timestamp('first_check_in_at')->nullable();
+            $table->timestamp('first_check_out_at')->nullable();
+            $table->timestamp('last_check_in_at')->nullable();
+            $table->timestamp('last_check_out_at')->nullable();
             $table->timestamps();
         });
     }
