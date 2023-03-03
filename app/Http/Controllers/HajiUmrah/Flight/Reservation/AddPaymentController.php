@@ -55,14 +55,11 @@ class AddPaymentController extends Controller
                 }
 
                 $paymentMethod = $paymentMethods->where('code', $request->payment_method)->first();
-                
-                if (!$paymentMethod->enabled) {
-                    throw new \Exception('payment_method.disabled');
-                }
 
                 $payment = $reservation->addPayment(
-                    $paymentMethods->where('code', $request->payment_method)->first(),
+                    $paymentMethod,
                     $request->amount,
+                    config('app.is_admin') ? 'paid' : 'unpaid'
                 );
             DB::commit();
 

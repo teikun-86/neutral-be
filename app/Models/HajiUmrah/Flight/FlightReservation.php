@@ -104,4 +104,21 @@ class FlightReservation extends Model
             },
         ); 
     }
+
+    public function status(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                if ($this->isExpired) return 'expired';
+
+                if ($this->amount_paid === 0 && !$this->isExpired) return 'pending';
+
+                if ($this->amount_paid > 0 && $this->amount_paid < $this->total_price) return 'partially paid';
+
+                if ($this->amount_paid === $this->total_price) return 'paid';
+
+                return 'unknown';
+            },
+        );
+    }
 }

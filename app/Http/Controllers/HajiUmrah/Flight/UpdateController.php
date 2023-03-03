@@ -22,6 +22,7 @@ class UpdateController extends Controller
             'company_id' => 'nullable',
             'airline_id' => 'required|exists:airlines,id',
             'flight_number' => 'nullable',
+            'return_flight_number' => 'nullable',
             'departure_airport_id' => 'required|exists:airports,id',
             'arrival_airport_id' => 'required|exists:airports,id',
             'return_departure_airport_id' => 'required|exists:airports,id',
@@ -29,16 +30,16 @@ class UpdateController extends Controller
             'program_type' => 'required|in:9,12',
             'price' => 'required|numeric',
             'seats' => 'required|numeric',
-            'depart_at' => 'required|date_format:Y-m-d H:i:s',
-            'arrive_at' => 'required|date_format:Y-m-d H:i:s',
-            'return_depart_at' => 'required|date_format:Y-m-d H:i:s',
-            'return_arrive_at' => 'required|date_format:Y-m-d H:i:s',
+            'depart_at' => 'required|date_format:Y-m-d H:i',
+            'arrive_at' => 'required|date_format:Y-m-d H:i',
+            'return_depart_at' => 'required|date_format:Y-m-d H:i',
+            'return_arrive_at' => 'required|date_format:Y-m-d H:i',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'validation.failed',
+                'message' => 'The given data was invalid',
                 'errors' => $validator->errors()
             ], 422);
 
@@ -66,7 +67,7 @@ class UpdateController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'flight.updated',
+                'message' => 'Flight Updated',
                 'data' => $flight
             ], 200);
         } catch (\Throwable $th) {
@@ -75,13 +76,13 @@ class UpdateController extends Controller
             if ($th instanceof ModelNotFoundException) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'flight.not_found'
+                    'message' => 'No flight with the given id was found'
                 ], 400);
             }
             
             return response()->json([
                 'success' => false,
-                'message' => 'flight.update_failed'
+                'message' => 'Failed to update a flight',
             ], 500);
         }
     }

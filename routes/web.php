@@ -9,6 +9,8 @@ use App\Http\Controllers\Destination;
 use App\Models\Country;
 use App\Http\Controllers\HajiUmrah;
 use App\Http\Controllers\Payment;
+use App\Http\Controllers\User;
+use App\Models\Airline;
 use App\Models\Company;
 
 Route::get('/', function () {
@@ -101,23 +103,33 @@ Route::get('/companies', function() {
     ], 200);
 });
 
+Route::get('/airlines', function() {
+    return response()->json([
+        'success' => true,
+        'data' => Airline::get()
+    ], 200);
+});
+
 Route::group([
     'prefix' => 'hajj-umrah',
-    'middleware' => ['auth:sanctum', 'user-type:agent,company']
+    'middleware' => ['auth:sanctum']
 ], function () {
     Route::group([
         'prefix' => 'flights'
     ], function () {
-        Route::get('/', HajiUmrah\Flight\ShowController::class)->middleware('has-company');
+        Route::get('/', HajiUmrah\Flight\ShowController::class);
         Route::get('/pool', HajiUmrah\Flight\PoolController::class);
-        Route::post('/store', HajiUmrah\Flight\StoreController::class);
-        Route::post('/update', HajiUmrah\Flight\UpdateController::class);
+        Route::post('/store', HajiUmrah\Flight\StoreController::class)->middleware('permission:haji-umrah.flight-create');
+        Route::post('/update', HajiUmrah\Flight\UpdateController::class)->middleware('permission:haji-umrah.flight-update');
+        Route::delete('/delete', HajiUmrah\Flight\DestroyController::class)->middleware('permission:haji-umrah.flight-delete');
 
         Route::group([
             'prefix' => 'reservations'
         ], function () {
             Route::get('/', HajiUmrah\Flight\Reservation\ShowController::class);
             Route::post('/store', HajiUmrah\Flight\Reservation\StoreController::class);
+            Route::post('/update', HajiUmrah\Flight\Reservation\UpdateController::class);
+            Route::delete('/delete', HajiUmrah\Flight\Reservation\DestroyController::class);
             Route::post('/add-payment', HajiUmrah\Flight\Reservation\AddPaymentController::class);
 
             Route::group([
@@ -132,6 +144,45 @@ Route::group([
             ], function () {
                 Route::post('/store', HajiUmrah\Flight\Reservation\Ticket\StoreController::class);
             });
+        });
+    });
+
+    Route::group([
+        'prefix' => 'hotels'
+    ], function() {
+        Route::get('/', HajiUmrah\Hotel\ShowController::class);
+        Route::post('/store', HajiUmrah\Hotel\StoreController::class);
+        Route::post('/update', HajiUmrah\Hotel\UpdateController::class);
+        Route::delete('/destroy', HajiUmrah\Hotel\DestroyController::class);
+
+        Route::group([
+            'prefix' => 'reservations'
+        ], function() {
+            Route::get('/', HajiUmrah\Hotel\Reservation\ShowController::class);
+            Route::post('/add-payment', HajiUmrah\Hotel\Reservation\AddPaymentController::class);
+            Route::post('/store', HajiUmrah\Hotel\Reservation\StoreController::class);
+            Route::post('/update', HajiUmrah\Hotel\Reservation\UpdateController::class);
+            Route::delete('/destroy', HajiUmrah\Hotel\Reservation\DestroyController::class);
+        });
+    });
+
+
+    Route::group([
+        'prefix' => 'packages'
+    ], function () {
+        Route::get('/', HajiUmrah\Package\ShowController::class);
+        Route::post('/store', HajiUmrah\Package\StoreController::class);
+        Route::post('/update', HajiUmrah\Package\UpdateController::class);
+        Route::delete('/destroy', HajiUmrah\Package\DestroyController::class);
+
+        Route::group([
+            'prefix' => 'reservations'
+        ], function () {
+            Route::get('/', HajiUmrah\Package\Reservation\ShowController::class);
+            Route::post('/add-payment', HajiUmrah\Package\Reservation\AddPaymentController::class);
+            Route::post('/store', HajiUmrah\Package\Reservation\StoreController::class);
+            Route::post('/update', HajiUmrah\Package\Reservation\UpdateController::class);
+            Route::delete('/destroy', HajiUmrah\Package\Reservation\DestroyController::class);
         });
     });
 
@@ -178,3 +229,5 @@ Route::group([
             ->middleware(['auth:sanctum', 'permission:payment-method-delete']);
     });
 });
+
+Route::get('/users', User\ShowController::class);

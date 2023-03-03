@@ -21,28 +21,47 @@ class ShowController extends Controller
             'flight.airline',
             'flight.departureAirport',
             'flight.arrivalAirport',
+            'flight.returnDepartureAirport',
+            'flight.returnArrivalAirport',
             'company',
             'manifest',
             'manifest.passengers',
             'ticket',
-            'payments'
+            'payments',
+            'user'
         ]);
 
-        if (!$request->user()->isAbleTo('hajj-umrah-flight-show')) {
-            $reservations = $reservations->where('user_id', $request->user()->id);
-        }
+        $orderBy = $request->input('order_by', 'created_at');
+        $direction = $request->input('order_direction', 'desc');
 
         if ($request->has('id')) {
             $reservations = $reservations->where('id', $request->id)->first();
 
             if ($reservations) {
-                $reservations->append(['amount_paid']);
+                $reservations->append(['amount_paid', 'amount_due', 'status']);
             }
             
             return response()->json([
                 'success' => true,
                 'reservation' => $reservations,
             ], 200);
+        }
+
+        if (config('app.is_admin')) {
+            $reservations = $reservations->orderBy($orderBy, $direction)->with('user')->get()
+                ->map(function ($res) {
+                    $res->flight->append('available_seats');
+                    $res->append(['amount_paid', 'amount_due', 'status']);
+                    return $res;
+                });
+            return response()->json([
+                'success' => true,
+                'reservations' => $reservations
+            ], 200);
+        }
+
+        if (!config('app.is_admin')) {
+            $reservations = $reservations->where('user_id', $request->user()->id);
         }
 
         $reservations = $reservations->get()

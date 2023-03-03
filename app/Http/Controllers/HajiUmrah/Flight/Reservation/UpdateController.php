@@ -7,6 +7,7 @@ use App\Models\HajiUmrah\Flight\FlightReservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UpdateController extends Controller
 {
@@ -20,7 +21,10 @@ class UpdateController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'reservation_id' => 'required|exists:haji_umrah_flight_reservations,id',
-            'seats' => 'required|integer'
+            'seats' => 'required|integer',
+            'flight_id' => [Rule::requiredIf(config('app.is_admin'))],
+            'user_id' => [Rule::requiredIf(config('app.is_admin'))],
+            'company_id' => [Rule::requiredIf(config('app.is_admin'))],
         ]);
 
         if ($validator->fails()) {
@@ -34,14 +38,14 @@ class UpdateController extends Controller
         try {
             DB::beginTransaction();
                 $reservation = FlightReservation::where('id', $request->reservation_id)
-                    ->where('user_id', $request->user()->id)
+                    ->when(!config('app.is_admin'), fn($q) => $q->where('user_id', $request->user()->id))
                     ->first();
 
                 if (!$reservation) {
                     throw new \Exception('reservation.not_found');
                 }
 
-                if ($reservation->expired_at->isPast()) {
+                if ($reservation->is_expired) {
                     throw new \Exception('reservation.expired');
                 }
 
@@ -49,10 +53,18 @@ class UpdateController extends Controller
                     throw new \Exception('reservation.already_paid');
                 }
 
-                $reservation->update([
+                $toUpdate = [
                     'seats' => $request->seats,
                     'total_price' => $reservation->price_per_seat * $request->seats,
-                ]);
+                ];
+
+                if (config('app.is_admin')) {
+                    $toUpdate['flight_id'] = $request->flight_id;
+                    $toUpdate['user_id'] = $request->user_id;
+                    $toUpdate['company_id'] = $request->company_id;
+                }
+
+                $reservation->update($toUpdate);
             DB::commit();
 
             return response()->json([
@@ -66,6 +78,7 @@ class UpdateController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'reservation.update_failed',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

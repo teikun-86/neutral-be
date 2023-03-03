@@ -19,10 +19,17 @@ class ShowController extends Controller
     public function __invoke(Request $request)
     {
         $user = $request->user();
-        
+        $orderBy = $request->input('order_by', 'depart_at');
+        $direction = $request->input('order_direction', 'asc');
+        $withExpired = $request->boolean('with_expired', false);
         $flights = Flight::query()
-            ->where('company_id', $user->company->id)
-            ->whereRaw("DATEDIFF(`depart_at`, NOW()) >= 45")
+            ->when(!config('app.is_admin'), function($query) use($user, $orderBy, $direction) {
+                return $query->where('company_id', $user->company->id)
+                    ->orderBy($orderBy, $direction);
+            })
+            ->when(!$withExpired, function($query) {
+                return $query->whereRaw("DATEDIFF(`depart_at`, NOW()) >= 45");
+            })
             ->with([
                 'airline' => fn ($query) => $query->select(['id', 'name', 'code', 'logo']),
                 'departureAirport' => fn ($query) => $query->select(['id', 'name', 'iata', 'city_id', 'country_id'])->with([
@@ -33,7 +40,16 @@ class ShowController extends Controller
                     'city' => fn ($query) => $query->select(['id', 'name', 'country_id']),
                     'country' => fn ($query) => $query->select(['id', 'name']),
                 ]),
-                'reservations' => fn ($query) => $query->select(['id', 'flight_id', 'seats', 'expired_at'])
+                'returnDepartureAirport' => fn ($query) => $query->select(['id', 'name', 'iata', 'city_id', 'country_id'])->with([
+                    'city' => fn ($query) => $query->select(['id', 'name', 'country_id']),
+                    'country' => fn ($query) => $query->select(['id', 'name']),
+                ]),
+                'returnArrivalAirport' => fn ($query) => $query->select(['id', 'name', 'iata', 'city_id', 'country_id'])->with([
+                    'city' => fn ($query) => $query->select(['id', 'name', 'country_id']),
+                    'country' => fn ($query) => $query->select(['id', 'name']),
+                ]),
+                'reservations' => fn ($query) => $query->select(['id', 'flight_id', 'seats', 'expired_at']),
+                'company'
             ])
             ->get()
             ->map(function($flight) {

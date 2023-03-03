@@ -30,6 +30,7 @@ class Flight extends Model
         'price',
         'seats',
         'flight_number',
+        'return_flight_number',
         'program_type',
         'depart_at',
         'arrive_at',

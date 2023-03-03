@@ -16,9 +16,7 @@ class IndexController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function __invoke(Request $request)
-    {
-        Log::debug("Request to: " . $request->fullUrl());
-        
+    {       
         $airports = Airport::query()->with(['city', 'country']);
 
         if ($request->has('iata')) {

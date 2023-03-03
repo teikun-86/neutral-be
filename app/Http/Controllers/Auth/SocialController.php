@@ -17,8 +17,13 @@ class SocialController extends Controller
     {
         if (! $this->_validateProvider($provider)) abort(404);
 
+        $url = config("services.{$provider}.redirect") . "?lang=" . app()->getLocale();
+        if (config('app.is_admin')) {
+            $url .= '&__sso_admin=1';
+        }
+
         config([
-            "services.{$provider}.redirect" => config("services.{$provider}.redirect") . "?lang=" . app()->getLocale(),
+            "services.{$provider}.redirect" => $url,
         ]);
         
         return Socialite::driver($provider)->redirect();
@@ -31,11 +36,16 @@ class SocialController extends Controller
     {
         if (! $this->_validateProvider($provider)) abort(404);
 
+        $url = config("services.{$provider}.redirect") . "?lang=" . app()->getLocale();
+        if (config('app.is_admin')) {
+            $url .= '&__sso_admin=1';
+        }
+
         config([
-            "services.{$provider}.redirect" => config("services.{$provider}.redirect") . "?lang=" . app()->getLocale(),
+            "services.{$provider}.redirect" => $url,
         ]);
 
-        $socialUser = Socialite::driver($provider)->stateless()->user();
+        $socialUser = Socialite::driver($provider)->user();
 
         $user = User::where('email', $socialUser->getEmail())
             ->orWhere("{$provider}_id", $socialUser->getId())
@@ -109,10 +119,11 @@ class SocialController extends Controller
      */
     private function _buildRedirect(string $provider, string $provider_id): string
     {
-        $fe = config('app.frontend_url');
+        $admin = config('app.is_admin');
+        $fe = $admin ? config('app.admin_url') : config('app.frontend_url');
         $locale = app()->getLocale();
 
-        $locale = $locale === 'en' ? 'en-US' : 'id-ID';
+        $locale = $admin ? '' : ($locale === 'en' ? 'en-US' : 'id-ID');
         
         return "{$fe}/$locale?social={$provider}&user_id={$provider_id}";
     }

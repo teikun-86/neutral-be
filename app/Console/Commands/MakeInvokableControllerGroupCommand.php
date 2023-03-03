@@ -72,6 +72,6 @@ class MakeInvokableControllerGroupCommand extends Command
         }
 
         return $controllers
-            ->map(fn ($name) => $namespace . '/' . ucfirst($name) . 'Controller');
+            ->map(fn ($name) => $namespace . '/' . str($name)->camel()->ucfirst() . 'Controller');
     }
 }

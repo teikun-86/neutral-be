@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('haji_umrah_flights', function (Blueprint $table) {
             $table->id();
             $table->foreignId('airline_id');
-            $table->foreignId('company_id');
+            $table->foreignId('company_id')->nullable();
             $table->foreignId('departure_airport_id');
             $table->foreignId('arrival_airport_id');
             $table->foreignId('return_departure_airport_id');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->integer('seats')->default(0);
             $table->string('flight_number')->nullable();
+            $table->string('return_flight_number')->nullable();
             $table->string('program_type')->nullable();
             $table->timestamp('depart_at')->nullable();
             $table->timestamp('arrive_at')->nullable();

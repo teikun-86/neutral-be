@@ -43,7 +43,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
         'facebook_id',
         'google_id',
-        'id',
         'country_id',
     ];
 

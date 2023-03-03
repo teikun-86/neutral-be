@@ -20,6 +20,7 @@ class StoreController extends Controller
             'company_id' => 'nullable|exists:companies,id',
             'airline_id' => 'required|exists:airlines,id',
             'flight_number' => 'nullable',
+            'return_flight_number' => 'nullable',
             'departure_airport_id' => 'required|exists:airports,id',
             'arrival_airport_id' => 'required|exists:airports,id',
             'return_departure_airport_id' => 'required|exists:airports,id',
@@ -27,16 +28,16 @@ class StoreController extends Controller
             'program_type' => 'required|in:9,12',
             'price' => 'required|numeric',
             'seats' => 'required|numeric',
-            'depart_at' => 'required|date_format:Y-m-d H:i:s',
-            'arrive_at' => 'required|date_format:Y-m-d H:i:s',
-            'return_depart_at' => 'required|date_format:Y-m-d H:i:s',
-            'return_arrive_at' => 'required|date_format:Y-m-d H:i:s',
+            'depart_at' => 'required|date_format:Y-m-d H:i',
+            'arrive_at' => 'required|date_format:Y-m-d H:i',
+            'return_depart_at' => 'required|date_format:Y-m-d H:i',
+            'return_arrive_at' => 'required|date_format:Y-m-d H:i',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => 'validation.failed',
+                'message' => 'The given data was invalid',
                 'errors' => $validator->errors()
             ], 422);
         }
@@ -49,13 +50,13 @@ class StoreController extends Controller
             DB::commit();
             return response()->json([
                 'success' => true,
-                'message' => 'flight.stored'
+                'message' => 'Flight Stored'
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'flight.store_failed',
+                'message' => 'Failed to store a flight',
                 'errors' => $th->getMessage()
             ], 500);
         }

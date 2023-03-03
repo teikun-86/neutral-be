@@ -8,6 +8,16 @@ use Illuminate\Http\UploadedFile;
 trait Payable
 {
     /**
+     * The "booting" method of the trait.
+     */
+    protected static function bootPayable(): void
+    {
+        static::deleting(function ($model) {
+            $model->payments()->delete();
+        });
+    }
+    
+    /**
      * Get the payment that owns the model.
      */
     public function payments(): \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -18,7 +28,7 @@ trait Payable
     /**
      * Get the amount paid.
      */
-    public function getAmountPaidAttribute(): float|null
+    public function getAmountPaidAttribute(): int|null
     {
         return $this->payments->where('status', 'paid')->sum('amount');
     }
@@ -26,7 +36,7 @@ trait Payable
     /**
      * Get the amount due.
      */
-    public function getAmountDueAttribute(): float|null
+    public function getAmountDueAttribute(): int|null
     {
         return $this->total_price - $this->amount_paid;
     }

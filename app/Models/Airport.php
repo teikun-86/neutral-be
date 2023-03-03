@@ -21,7 +21,6 @@ class Airport extends Model
     public $hidden = [
         'created_at',
         'updated_at',
-        'id'
     ];
 
     /**

@@ -57,6 +57,8 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+    
+    'admin_url' => env('ADMIN_URL', 'http://localhost:3001'),
 
     'api' => [
         'url' => env('API_URL'),
@@ -222,5 +224,7 @@ return [
     ])->toArray(),
 
     'version' => env('APP_VERSION', '1.0.0'),
+
+    'is_admin' => false
 
 ];
