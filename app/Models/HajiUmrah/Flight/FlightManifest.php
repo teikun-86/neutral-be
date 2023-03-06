@@ -20,6 +20,7 @@ class FlightManifest extends Model
      */
     protected $fillable = [
         'flight_reservation_id',
+        'package_reservation_id',
         'user_id',
         'manifest_file',
         'status',
@@ -31,6 +32,14 @@ class FlightManifest extends Model
     public function reservation()
     {
         return $this->belongsTo(FlightReservation::class, 'flight_reservation_id');
+    }
+
+    /**
+     * Get the reservation that owns the manifest.
+     */
+    public function packageReservation()
+    {
+        return $this->belongsTo(FlightReservation::class, 'package_reservation_id');
     }
 
     /**

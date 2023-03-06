@@ -1,51 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\Payment;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Payment\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class ValidatePaymentController extends Controller
+class DestroyController extends Controller
 {
     /**
      * Handle the incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function __invoke(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'payment_code' => 'required|string|exists:payments,payment_code',
+            'ids' => 'required|array',
+            'ids.*' => 'required|exists:users,id'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
-                'message' => 'validation.failed',
-                'errors' => $validator->errors()
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
             ], 422);
         }
 
         try {
             DB::beginTransaction();
-            $payment = Payment::where('payment_code', $request->payment_code)->first();
-            if ($payment->status === 'unpaid') {
-                $payment->update(['status' => 'paid']);
-            }
+            User::whereIn('id', $request->ids)->delete();
             DB::commit();
             return response()->json([
                 'success' => true,
-                'message' => 'Payment validated successfully.',
+                'message' => 'The selected users have been deleted.'
             ], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to validate payment.',
+                'message' => 'Failed to delete the selected users.',
                 'errors' => $th->getMessage()
             ], 500);
         }

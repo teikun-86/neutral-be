@@ -5,6 +5,7 @@ namespace App\Http\Controllers\HajiUmrah\Package;
 use App\Http\Controllers\Controller;
 use App\Models\HajiUmrah\Package\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ShowController extends Controller
 {
@@ -48,6 +49,16 @@ class ShowController extends Controller
             ])
             ->when($isAdmin, function ($query) use ($order) {
                 return $query->orderBy($order[0], $order[1]);
+            })
+            ->when($request->boolean('pool'), function($query) {
+                return $query->whereRelation('flight', function($flight) {
+                    return $flight->where(function ($fquery) {
+                        $fquery->whereRaw("DATEDIFF(`depart_at`, NOW()) < 45 AND DATEDIFF(`depart_at`, NOW()) >= 0")
+                            ->orWhereRaw("DATEDIFF(`depart_at`, NOW()) >= 0 AND `company_id` IS NULL");
+                    });
+                });
+            }, function($query) use($isAdmin) {
+                return $isAdmin ? $query : $query->whereRelation('flight', fn($q) => $q->whereRaw("DATEDIFF(`depart_at`, NOW()) >= 45 AND `company_id` = " . auth()->user()->company_id));
             });
         if ($request->has('id')) {
             $package = $packages->where('id', $request->input('id'))->first();

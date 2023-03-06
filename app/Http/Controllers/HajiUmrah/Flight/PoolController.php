@@ -31,6 +31,14 @@ class PoolController extends Controller
                     'city' => fn ($query) => $query->select(['id', 'name', 'country_id']),
                     'country' => fn ($query) => $query->select(['id', 'name']),
                 ]),
+                'returnDepartureAirport' => fn ($query) => $query->select(['id', 'name', 'iata', 'city_id', 'country_id'])->with([
+                    'city' => fn ($query) => $query->select(['id', 'name', 'country_id']),
+                    'country' => fn ($query) => $query->select(['id', 'name']),
+                ]),
+                'returnArrivalAirport' => fn ($query) => $query->select(['id', 'name', 'iata', 'city_id', 'country_id'])->with([
+                    'city' => fn ($query) => $query->select(['id', 'name', 'country_id']),
+                    'country' => fn ($query) => $query->select(['id', 'name']),
+                ]),
                 'reservations',
                 'company'
             ])

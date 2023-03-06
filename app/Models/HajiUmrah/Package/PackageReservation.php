@@ -3,6 +3,7 @@
 namespace App\Models\HajiUmrah\Package;
 
 use App\Models\Company;
+use App\Models\HajiUmrah\Flight\FlightManifest;
 use App\Models\User;
 use App\Traits\HasCreator;
 use App\Traits\Payable;
@@ -70,5 +71,10 @@ class PackageReservation extends Model
                 return 'unknown';
             },
         );
+    }
+
+    public function manifest()
+    {
+        return $this->hasOne(FlightManifest::class, 'package_reservation_id', 'id');
     }
 }

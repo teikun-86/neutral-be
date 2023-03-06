@@ -57,16 +57,16 @@ class LaratrustSeeder extends Seeder
                 }
             }
 
-            // Attach all permissions to the role
             $role->permissions()->sync($permissions);
 
             if (Config::get('laratrust_seeder.create_users')) {
                 $this->command->info("Creating '{$key}' user");
-                // Create default user for each role
+                $email = str($key)->snake().'@app.com';
                 $user = \App\Models\User::create([
                     'name' => ucwords(str_replace('_', ' ', $key)),
-                    'email' => str($key)->snake().'@app.com',
-                    'password' => bcrypt('password')
+                    'email' => $email,
+                    'password' => bcrypt('password'),
+                    'avatar' => "https://secure.gravatar.com/avatar/".md5($email)."?s=200&d=mm",
                 ]);
                 $user->attachRole($role);
             }

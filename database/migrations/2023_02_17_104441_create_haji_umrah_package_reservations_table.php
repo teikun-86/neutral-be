@@ -21,6 +21,7 @@ return new class extends Migration
             $table->bigInteger('amount');
             $table->bigInteger('price_per_package');
             $table->bigInteger('total_price');
+            $table->string('guests_map')->nullable();
             $table->timestamp('expired_at')->nullable();
             $table->timestamp('reserved_at')->nullable();
             $table->boolean('is_resell')->default(false);

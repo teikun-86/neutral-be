@@ -48,7 +48,9 @@ class ShowController extends Controller
                     },
                 ]),
                 'user',
-                'company'
+                'company',
+                'manifest',
+                'manifest.passengers'
             ])
             ->orderBy($order[0], $order[1]);
 

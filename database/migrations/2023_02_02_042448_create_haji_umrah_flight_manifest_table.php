@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('haji_umrah_flight_manifest', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('flight_reservation_id');
+            $table->foreignId('flight_reservation_id')->nullable();
+            $table->foreignId('package_reservation_id')->nullable();
             $table->foreignId('user_id');
             $table->string('manifest_file');
             $table->string('status');

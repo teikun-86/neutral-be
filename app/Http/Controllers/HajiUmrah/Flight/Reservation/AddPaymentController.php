@@ -22,8 +22,8 @@ class AddPaymentController extends Controller
         $paymentMethods = PaymentMethod::get();
         
         $validator = Validator::make($request->all(), [
-            'reservation_id' => 'required|exists:haji_umrah_flight_reservations,id',
-            'payment_method' => ['required', 'in:' . implode(',', $paymentMethods->pluck('code')->toArray())],
+            'id' => 'required|exists:haji_umrah_flight_reservations,id',
+            'payment_method_code' => ['required', 'in:' . implode(',', $paymentMethods->pluck('code')->toArray())],
             'amount' => 'required|integer|min:1',
         ]);
 
@@ -38,7 +38,7 @@ class AddPaymentController extends Controller
         try {
             DB::beginTransaction();
                 $reservation = FlightReservation::with(['flight'])
-                    ->where('id', $request->reservation_id)
+                    ->where('id', $request->id)
                     ->where('user_id', $request->user()->id)
                     ->first();
 
@@ -54,7 +54,7 @@ class AddPaymentController extends Controller
                     throw new \Exception('reservation.already_paid');
                 }
 
-                $paymentMethod = $paymentMethods->where('code', $request->payment_method)->first();
+                $paymentMethod = $paymentMethods->where('code', $request->payment_method_code)->first();
 
                 $payment = $reservation->addPayment(
                     $paymentMethod,

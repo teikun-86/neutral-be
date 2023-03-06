@@ -10,7 +10,8 @@ use App\Models\Country;
 use App\Http\Controllers\HajiUmrah;
 use App\Http\Controllers\Payment;
 use App\Http\Controllers\User;
-use App\Models\Airline;
+use App\Http\Controllers\Airline;
+use App\Http\Controllers\Role;
 use App\Models\Company;
 
 Route::get('/', function () {
@@ -103,11 +104,13 @@ Route::get('/companies', function() {
     ], 200);
 });
 
-Route::get('/airlines', function() {
-    return response()->json([
-        'success' => true,
-        'data' => Airline::get()
-    ], 200);
+Route::group([
+    'prefix' => 'airlines',
+], function() {
+    Route::get('/', Airline\ShowController::class);
+    Route::post('/store', Airline\StoreController::class);
+    Route::post('/update', Airline\UpdateController::class);
+    Route::delete('/delete', Airline\DestroyController::class);
 });
 
 Route::group([
@@ -161,6 +164,7 @@ Route::group([
             Route::get('/', HajiUmrah\Hotel\Reservation\ShowController::class);
             Route::post('/add-payment', HajiUmrah\Hotel\Reservation\AddPaymentController::class);
             Route::post('/store', HajiUmrah\Hotel\Reservation\StoreController::class);
+            Route::post('/store-guest-map', HajiUmrah\Hotel\Reservation\StoreGuestMapController::class);
             Route::post('/update', HajiUmrah\Hotel\Reservation\UpdateController::class);
             Route::delete('/destroy', HajiUmrah\Hotel\Reservation\DestroyController::class);
         });
@@ -181,6 +185,8 @@ Route::group([
             Route::get('/', HajiUmrah\Package\Reservation\ShowController::class);
             Route::post('/add-payment', HajiUmrah\Package\Reservation\AddPaymentController::class);
             Route::post('/store', HajiUmrah\Package\Reservation\StoreController::class);
+            Route::post('/store-manifest', HajiUmrah\Package\Reservation\StoreManifestController::class);
+            Route::post('/store-guest-map', HajiUmrah\Package\Reservation\StoreGuestsMapController::class);
             Route::post('/update', HajiUmrah\Package\Reservation\UpdateController::class);
             Route::delete('/destroy', HajiUmrah\Package\Reservation\DestroyController::class);
         });
@@ -217,6 +223,7 @@ Route::group([
 Route::group([
     'prefix' => 'payment'
 ], function() {
+    Route::post('/validate', Payment\ValidatePaymentController::class);
     Route::group([
         'prefix' => 'payment-methods'
     ], function() {
@@ -230,4 +237,20 @@ Route::group([
     });
 });
 
-Route::get('/users', User\ShowController::class);
+Route::group([
+    'prefix' => 'users'
+], function() {
+    Route::get('/', User\ShowController::class);
+    Route::post('/store', User\StoreController::class);
+    Route::post('/update', User\UpdateController::class);
+    Route::delete('/destroy', User\DestroyController::class);
+});
+
+Route::group([
+    'prefix' => 'roles'
+], function() {
+    Route::get('/', Role\ShowController::class);
+    Route::post('/store', Role\StoreController::class);
+    Route::post('/update', Role\UpdateController::class);
+    Route::delete('/destroy', Role\DestroyController::class);
+}); 
